@@ -19,6 +19,4 @@ class StockChartContainer extends Component {
   }
 }
 
-// <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
-//         <Line type="monotone" dataKey="amt" stroke="#8084d8" />
 export default StockChartContainer;

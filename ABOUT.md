@@ -14,3 +14,8 @@ Should have:
 Version 1:
 - Search bar for ticker
 - Chart for ticker data
+
+Version 2:
+- Set up Redux for one ticker's data
+- Have Column to store past searches
+- Store data for multiple tickers
