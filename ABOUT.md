@@ -19,3 +19,8 @@ Version 2:
 - Set up Redux for one ticker's data
 - Have Column to store past searches
 - Store data for multiple tickers
+
+Version 3:
+- Have Different Time periods
+- Option to Normalize Data (just view percentage)
+- Have different colors

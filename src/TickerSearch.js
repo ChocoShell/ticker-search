@@ -3,7 +3,7 @@ import './TickerSearch.css';
 
 function TickerSearch(props) {
   return (
-    <div className="col-centered">
+    <div className="search">
       <form onSubmit={props.handleSubmit}>
         <label>
           {props.name}:
