@@ -31,7 +31,7 @@ class StockTracker extends Component {
     this.setState({
       tickers: this.state.tickers.filter( a => a !== value),
       data
-    })
+    });
   }
 
   handleNormalizeClick = () => {
@@ -62,7 +62,7 @@ class StockTracker extends Component {
         },
         error => {
           console.log(error);
-          this.setState({searchError: `Could not find ticker: ${ticker}`})
+          this.setState({searchError: `Could not find ticker: ${ticker}`});
         }
       );
   }
