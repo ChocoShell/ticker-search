@@ -1,9 +1,9 @@
 // https://blog.logrocket.com/data-visualization-in-react-using-react-d3-c35835af16d0
 import React, { Component } from 'react';
 import {LineChart, XAxis, YAxis, CartesianGrid, Line, Tooltip} from 'recharts';
-import "./StockChart.css";
+import "./Chart.css";
 
-class StockChart extends Component {
+class Chart extends Component {
   render() {
     const {width, height, data, keys} = this.props;
     return (
@@ -22,4 +22,4 @@ class StockChart extends Component {
 
 // <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
 // <Line type="monotone" dataKey="amt" stroke="#8084d8" />
-export default StockChart;
+export default Chart;

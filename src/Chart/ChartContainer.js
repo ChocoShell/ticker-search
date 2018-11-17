@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import StockChart from './StockChart';
+import Chart from './Chart';
 
-class StockChartContainer extends Component {
+class ChartContainer extends Component {
   state = {
     width: 700,
     height: 500
@@ -23,15 +23,16 @@ class StockChartContainer extends Component {
   };
   render() {
     const {data, keys} = this.props;
+    const formattedData = this.formatData(data);
     return (
-      <StockChart 
+      <Chart 
         keys={keys}
-        data={this.formatData(data)} 
-        width={this.state.width} 
+        data={formattedData}
+        width={this.state.width}
         height={this.state.height}
       />
     )
   }
 }
 
-export default StockChartContainer;
+export default ChartContainer;

@@ -1,7 +1,7 @@
 import React from 'react';
-import './TickerSearch.css';
+import './SearchBar.css';
 
-function TickerSearch(props) {
+function SearchBar(props) {
   return (
     <div className="search">
       <form onSubmit={props.handleSubmit}>
@@ -15,4 +15,4 @@ function TickerSearch(props) {
   )
 }
 
-export default TickerSearch;
+export default SearchBar;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import TickerSearch from './TickerSearch';
+import List from './List';
 
-class TickerSearchContainer extends Component {
+class ListContainer extends Component {
   state = {
     name: "Ticker",
     value: ""
@@ -19,14 +19,11 @@ class TickerSearchContainer extends Component {
   
   render() {
     return (
-      <TickerSearch
-        handleSubmit={this.handleSubmit}
-        handleChange={this.handleChange}
-        value={this.state.value}
-        name={this.state.name}
+      <List
+        items={this.props.items}
       />
     )
   }
 }
 
-export default TickerSearchContainer;
+export default ListContainer;

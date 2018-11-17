@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import TickerSidebarContainer from './TickerSidebarContainer';
-import TickerSearchContainer from './TickerSearchContainer';
-import StockChartContainer from './StockChartContainer';
+import ListContainer from './List/ListContainer';
+import SearchBarContainer from './SearchBar/SearchBarContainer';
+import ChartContainer from './Chart/ChartContainer';
 import "./StockTracker.css";
 import {getUrl} from './utils';
 
@@ -50,17 +50,17 @@ class StockTracker extends Component {
   render() {
     return (
       <div className="container">
-        <TickerSearchContainer
-          ticker={this.state.ticker}
+        <SearchBarContainer
+          name={this.state.ticker}
           handleSubmit={this.handleSubmit}
         />
         <div className="second-row">
-          <StockChartContainer
+          <ChartContainer
             data={this.state.data}
             keys={this.state.tickers}
           />
-          <TickerSidebarContainer
-            tickers={this.state.tickers}
+          <ListContainer
+            items={this.state.tickers}
           />
         </div>  
       </div>

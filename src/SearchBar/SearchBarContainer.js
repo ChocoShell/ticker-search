@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import TickerSidebar from './TickerSidebar';
+import SearchBar from './SearchBar';
 
-class TickerSidebarContainer extends Component {
+class SearchBarContainer extends Component {
   state = {
     name: "Ticker",
     value: ""
@@ -19,11 +19,14 @@ class TickerSidebarContainer extends Component {
   
   render() {
     return (
-      <TickerSidebar
-        tickers={this.props.tickers}
+      <SearchBar
+        handleSubmit={this.handleSubmit}
+        handleChange={this.handleChange}
+        value={this.state.value}
+        name={this.state.name}
       />
     )
   }
 }
 
-export default TickerSidebarContainer;
+export default SearchBarContainer;
