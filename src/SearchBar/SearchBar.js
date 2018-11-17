@@ -6,7 +6,7 @@ function SearchBar(props) {
     <div className="search">
       <form onSubmit={props.handleSubmit}>
         <label>
-          {props.name}:
+          {props.name}:&nbsp;
           <input onChange={props.handleChange} type="text" name={props.name} />
         </label>
         <input type="submit" value="Submit" />

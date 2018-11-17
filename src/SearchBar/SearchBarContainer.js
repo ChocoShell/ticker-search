@@ -3,7 +3,6 @@ import SearchBar from './SearchBar';
 
 class SearchBarContainer extends Component {
   state = {
-    name: "Ticker",
     value: ""
   }
 
@@ -23,7 +22,7 @@ class SearchBarContainer extends Component {
         handleSubmit={this.handleSubmit}
         handleChange={this.handleChange}
         value={this.state.value}
-        name={this.state.name}
+        name={this.props.name}
       />
     )
   }

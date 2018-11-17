@@ -6,7 +6,7 @@ class ChartContainer extends Component {
     width: 700,
     height: 500
   }
-  formatData = data => {
+  formatData = (data, normalize) => {
     const keys = Object.keys(data);
     if (keys.length > 0) {
       const length = data.date.length;
@@ -14,7 +14,11 @@ class ChartContainer extends Component {
       for (let j=0; j < length; j++) {
         const node = {};
         for (let key of keys) {
-          node[key] = data[key][j];
+          if (normalize) {
+            node[key] = data[key][j]/data[key][0];
+          } else {
+            node[key] = data[key][j];
+          }
         }
         finalData.push(node);
       }
@@ -22,8 +26,8 @@ class ChartContainer extends Component {
     }
   };
   render() {
-    const {data, keys} = this.props;
-    const formattedData = this.formatData(data);
+    const {data, keys, normalize} = this.props;
+    const formattedData = this.formatData(data, normalize);
     return (
       <Chart 
         keys={keys}

@@ -8,9 +8,9 @@ import {getUrl} from './utils';
 class StockTracker extends Component {
   state = {
     data: {},
-    keys: [],
-    ticker: "",
-    tickers: []
+    searchBarTitle: "Ticker",
+    tickers: [],
+    normalize: false
   }
 
   handleSubmit = value => {
@@ -20,6 +20,20 @@ class StockTracker extends Component {
       tickers: [...this.state.tickers, ticker]
     });
     this.getTickerInfo(ticker);
+  }
+
+  handleTickerClick = value => {
+    const data = {...this.state.data};
+    delete data[value];
+
+    this.setState({
+      tickers: this.state.tickers.filter( a => a !== value),
+      data
+    })
+  }
+
+  handleNormalizeClick = () => {
+    this.setState({normalize: !this.state.normalize});
   }
 
   mapTickerData = tickerData => {
@@ -50,17 +64,24 @@ class StockTracker extends Component {
   render() {
     return (
       <div className="container">
-        <SearchBarContainer
-          name={this.state.ticker}
-          handleSubmit={this.handleSubmit}
-        />
+        <div className="second-row">
+          <SearchBarContainer
+            name={this.state.searchBarTitle}
+            handleSubmit={this.handleSubmit}
+          />
+          <button onClick={this.handleNormalizeClick}>
+            {this.state.normalize ? "Unnormalize?": "Normalize?"}
+          </button>
+        </div>
         <div className="second-row">
           <ChartContainer
             data={this.state.data}
             keys={this.state.tickers}
+            normalize={this.state.normalize}
           />
           <ListContainer
             items={this.state.tickers}
+            handleClick={this.handleTickerClick}
           />
         </div>  
       </div>
