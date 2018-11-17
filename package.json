@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "http://chocoshell.github.io/ticker-search",
   "dependencies": {
-    "d3": "^5.7.0",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-redux": "^5.1.0",
