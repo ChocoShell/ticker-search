@@ -8,18 +8,20 @@ import {getUrl} from './utils';
 class StockTracker extends Component {
   state = {
     data: {},
-    searchBarTitle: "Ticker",
     tickers: [],
-    normalize: false
+    normalize: false,
+    searchBarTitle: "Ticker",
+    searchError: null,    
+    sidebarTitle: "Tickers Shown"
   }
 
-  handleSubmit = value => {
-    const ticker = value;
-    this.setState({
-      ticker,
-      tickers: [...this.state.tickers, ticker]
-    });
-    this.getTickerInfo(ticker);
+  handleSearchSubmit = value => {
+    if (this.state.tickers.includes(value)) {
+      this.setState({searchError: `${value} already displayed.`});
+    } else {
+      this.setState({searchError: null});
+      this.getTickerInfo(value);
+    }
   }
 
   handleTickerClick = value => {
@@ -36,8 +38,8 @@ class StockTracker extends Component {
     this.setState({normalize: !this.state.normalize});
   }
 
-  mapTickerData = tickerData => {
-    return tickerData.map(dataPoint => dataPoint.close);
+  mapTickerData = (tickerData, key) => {
+    return tickerData.map(dataPoint => dataPoint[key]);
   }
 
   getTickerInfo = ticker => {
@@ -47,16 +49,20 @@ class StockTracker extends Component {
       .then(
         result => {
           // Massage Data
-          const tickerData = this.mapTickerData(result);
-          const date = {};
+          const tickerData = this.mapTickerData(result, "close");
+          const dateData = {};
           if (!this.state.data.date) {
-            date.date = result.map(x => x.date);
+            dateData.date = this.mapTickerData(result, "date");
           }
           // Put data into state
-          this.setState({data: {...this.state.data, ...date, [ticker]: tickerData}});
+          this.setState({
+            data: {...this.state.data, ...dateData, [ticker]: tickerData},
+            tickers: [...this.state.tickers, ticker]
+          });
         },
         error => {
           console.log(error);
+          this.setState({searchError: `Could not find ticker: ${ticker}`})
         }
       );
   }
@@ -66,8 +72,9 @@ class StockTracker extends Component {
       <div className="container">
         <div className="second-row">
           <SearchBarContainer
+            error={this.state.searchError}
+            handleSubmit={this.handleSearchSubmit}
             name={this.state.searchBarTitle}
-            handleSubmit={this.handleSubmit}
           />
           <button onClick={this.handleNormalizeClick}>
             {this.state.normalize ? "Unnormalize?": "Normalize?"}
@@ -80,8 +87,9 @@ class StockTracker extends Component {
             normalize={this.state.normalize}
           />
           <ListContainer
-            items={this.state.tickers}
             handleClick={this.handleTickerClick}
+            items={this.state.tickers}
+            title={this.state.sidebarTitle}
           />
         </div>  
       </div>

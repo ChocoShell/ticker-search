@@ -10,7 +10,10 @@ function SearchBar(props) {
           <input onChange={props.handleChange} type="text" name={props.name} />
         </label>
         <input type="submit" value="Submit" />
-      </form> 
+      </form>
+      <div className="error">
+        {props.error || <span>&nbsp;&nbsp;</span>}
+      </div>
     </div>
   )
 }

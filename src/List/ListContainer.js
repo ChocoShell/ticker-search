@@ -20,8 +20,9 @@ class ListContainer extends Component {
   render() {
     return (
       <List
-        items={this.props.items}
         handleClick={this.props.handleClick}
+        items={this.props.items}
+        title={this.props.title}
       />
     )
   }

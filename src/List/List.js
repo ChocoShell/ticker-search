@@ -5,7 +5,7 @@ import './List.css';
 const List = props => {
   return (
     <div className="sidebar-outline">
-      <h3>Ticker Sidebar</h3>
+      <h3>{props.title}</h3>
       <hr />
       <ul>
         {props.items.map(item => {

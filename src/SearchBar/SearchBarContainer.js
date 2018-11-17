@@ -19,10 +19,11 @@ class SearchBarContainer extends Component {
   render() {
     return (
       <SearchBar
+        error={this.props.error}
         handleSubmit={this.handleSubmit}
         handleChange={this.handleChange}
-        value={this.state.value}
         name={this.props.name}
+        value={this.state.value}
       />
     )
   }
