@@ -6,13 +6,71 @@ import "./StockTracker.css";
 import {getUrl} from './utils';
 
 class StockTracker extends Component {
+  constructor() {
+    super();
+    this.dateRanges = {
+      "1d": "One Day",
+      "1m": "One Month",
+      "3m": "Three Months",
+      "6m": "Six Months",
+      "ytd": "Year to Date",
+    };
+    this.dateRangeKeys = Object.keys(this.dateRanges);
+  }
+
   state = {
     data: {},
     tickers: [],
     normalize: false,
+    selectedRange: "1m",
     searchBarTitle: "Ticker",
     searchError: null,    
     sidebarTitle: "Tickers Shown"
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // Typical usage (don't forget to compare props):
+    if (this.state.selectedRange !== prevState.selectedRange) {
+      this.fetchAllData();
+    }
+  }
+
+  mapTickerData = (tickerData, key) => {
+    return tickerData.map(dataPoint => dataPoint[key]);
+  }
+
+  getTickerInfo = (ticker, clearData) => {
+    // Make API call
+    fetch(getUrl(ticker, this.state.selectedRange))
+      .then(res => res.json())
+      .then(
+        result => {
+          // Massage Data
+          const tickerData = this.mapTickerData(result, "close");
+          const dateData = {};
+          if (!this.state.data.date || clearData) {
+            dateData.date = this.mapTickerData(result, "date");
+          }
+          const tickers = [...this.state.tickers];
+          if(!this.state.tickers.includes(ticker)) {
+            tickers.push(ticker);
+          }
+          // Put data into state
+          const data = {...this.state.data, ...dateData, [ticker]: tickerData};
+          this.setState({
+            data,
+            tickers
+          });
+        },
+        error => {
+          console.warn(error);
+          this.setState({searchError: `Could not find ticker: ${ticker}`});
+        }
+      );
+  }
+
+  fetchAllData = () => {
+    this.state.tickers.map(ticker => this.getTickerInfo(ticker, true));
   }
 
   handleSearchSubmit = value => {
@@ -20,8 +78,12 @@ class StockTracker extends Component {
       this.setState({searchError: `${value} already displayed.`});
     } else {
       this.setState({searchError: null});
-      this.getTickerInfo(value);
+      this.getTickerInfo(value, false);
     }
+  }
+
+  handleDateClick = newDateRange => {
+    this.setState({selectedRange: newDateRange});
   }
 
   handleTickerClick = value => {
@@ -38,35 +100,6 @@ class StockTracker extends Component {
     this.setState({normalize: !this.state.normalize});
   }
 
-  mapTickerData = (tickerData, key) => {
-    return tickerData.map(dataPoint => dataPoint[key]);
-  }
-
-  getTickerInfo = ticker => {
-    // Make API call
-    fetch(getUrl(ticker))
-      .then(res => res.json())
-      .then(
-        result => {
-          // Massage Data
-          const tickerData = this.mapTickerData(result, "close");
-          const dateData = {};
-          if (!this.state.data.date) {
-            dateData.date = this.mapTickerData(result, "date");
-          }
-          // Put data into state
-          this.setState({
-            data: {...this.state.data, ...dateData, [ticker]: tickerData},
-            tickers: [...this.state.tickers, ticker]
-          });
-        },
-        error => {
-          console.log(error);
-          this.setState({searchError: `Could not find ticker: ${ticker}`});
-        }
-      );
-  }
-
   render() {
     return (
       <div className="container">
@@ -76,7 +109,7 @@ class StockTracker extends Component {
             handleSubmit={this.handleSearchSubmit}
             name={this.state.searchBarTitle}
           />
-          <button onClick={this.handleNormalizeClick}>
+          <button className="normalize" onClick={this.handleNormalizeClick}>
             {this.state.normalize ? "Unnormalize?": "Normalize?"}
           </button>
         </div>
@@ -91,7 +124,18 @@ class StockTracker extends Component {
             items={this.state.tickers}
             title={this.state.sidebarTitle}
           />
-        </div>  
+        </div>
+        <div className="date-range">
+          {
+            this.dateRangeKeys.map(date => {
+              return (
+                <button key={date} onClick={() => this.handleDateClick(date)}>
+                  {this.dateRanges[date]}
+                </button>
+              )
+            })
+          }
+        </div>
       </div>
     );
   }

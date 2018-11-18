@@ -1,9 +1,24 @@
 .container {
     display: flex;
     flex-direction: column;
+    margin: 10px;
+    outline: 2px solid black;
 }
 
 .second-row {
     display: flex;
     flex-direction: row;
+}
+
+.normalize {
+    margin: 10px;
+    outline: 2px solid fuchsia;
+}
+
+.date-range {
+    display: flex;
+    flex-direction: row;
+    outline: 2px solid lime;
+    padding: 10px;
+    margin: 10px;
 }

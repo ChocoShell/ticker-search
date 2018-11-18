@@ -1,1 +1,1 @@
-export const getUrl = ticker => `https://api.iextrading.com/1.0/stock/${ticker}/chart/1m`;
+export const getUrl = (ticker, dateRange) => `https://api.iextrading.com/1.0/stock/${ticker}/chart/${dateRange}`;

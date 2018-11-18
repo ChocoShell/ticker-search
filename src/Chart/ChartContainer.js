@@ -2,20 +2,21 @@ import React, { Component } from 'react';
 import Chart from './Chart';
 
 class ChartContainer extends Component {
-  state = {
-    width: 700,
-    height: 500
+  constructor() {
+    super();
+    this.width = 800;
+    this.height = 500;
   }
   formatData = (data, normalize) => {
-    const keys = Object.keys(data);
+    const keys = Object.keys(data).filter(key => key !== "date");
     if (keys.length > 0) {
       const length = data.date.length;
       let finalData = [];
       for (let j=0; j < length; j++) {
-        const node = {};
+        const node = {date: data.date[j]};
         for (let key of keys) {
           if (normalize) {
-            node[key] = data[key][j]/data[key][0];
+            node[key] = (data[key][j]/data[key][0]).toFixed(4);
           } else {
             node[key] = data[key][j];
           }
@@ -32,8 +33,8 @@ class ChartContainer extends Component {
       <Chart 
         keys={keys}
         data={formattedData}
-        width={this.state.width}
-        height={this.state.height}
+        width={this.width}
+        height={this.height}
       />
     )
   }

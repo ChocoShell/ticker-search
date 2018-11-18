@@ -7,7 +7,7 @@ class ClickableListItem extends React.Component {
   }
   render() {
     return (
-      <li onClick={this.handleClick} key={this.props.key}>
+      <li onClick={this.handleClick}>
         {this.props.value}
       </li>
     )
