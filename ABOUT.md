@@ -24,3 +24,6 @@ Version 3:
 - Have Different Time periods
 - Option to Normalize Data (just view percentage)
 - Have different colors
+
+Command to deploy to gh-pages:
+git subtree push --prefix build/ origin gh-pages
