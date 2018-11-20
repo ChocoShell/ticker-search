@@ -5,7 +5,7 @@ import "./Chart.css";
 
 class Chart extends Component {
   render() {
-    const {width, height, data, keys} = this.props;
+    const {width, height, data, keys, colors} = this.props;
     return (
       <div className="chart">
         <LineChart width={width} height={height} data={data}>
@@ -13,13 +13,11 @@ class Chart extends Component {
           <YAxis type="number" domain={['auto', 'auto']} />
           <Tooltip />
           <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-          {keys && keys.map(key => <Line type="monotone" dataKey={key} key={key} stroke="#8884d8" />)}
+          {keys && keys.map(key => <Line type="monotone" dataKey={key} key={key} stroke={colors[key]} />)}
         </LineChart>
       </div>
     )
   }
 }
 
-// <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
-// <Line type="monotone" dataKey="amt" stroke="#8084d8" />
 export default Chart;

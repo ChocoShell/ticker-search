@@ -27,12 +27,13 @@ class ChartContainer extends Component {
     }
   };
   render() {
-    const {data, keys, normalize} = this.props;
+    const {data, keys, normalize, colors} = this.props;
     const formattedData = this.formatData(data, normalize);
     return (
       <Chart 
-        keys={keys}
+        colors={colors}
         data={formattedData}
+        keys={keys}
         width={this.width}
         height={this.height}
       />

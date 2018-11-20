@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import List from './List';
+import Sidebar from './Sidebar';
 
-class ListContainer extends Component {
+class SidebarContainer extends Component {
   state = {
     name: "Ticker",
     value: ""
@@ -19,7 +19,8 @@ class ListContainer extends Component {
 
   render() {
     return (
-      <List
+      <Sidebar
+        colors={this.props.colors}
         handleClick={this.props.handleClick}
         items={this.props.items}
         title={this.props.title}
@@ -28,4 +29,4 @@ class ListContainer extends Component {
   }
 }
 
-export default ListContainer;
+export default SidebarContainer;

@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import ListContainer from './List/ListContainer';
+import SidebarContainer from './Sidebar/SidebarContainer';
 import SearchBarContainer from './SearchBar/SearchBarContainer';
 import ChartContainer from './Chart/ChartContainer';
 import "./StockTracker.css";
 import {getUrl} from './utils';
 
+
 class StockTracker extends Component {
   constructor() {
     super();
+    this.baseColors = [
+      "#82ca9d", "#8084d8", "#8be07f", "#d884d4",
+      "#83b5ab", "#84d0d8", "#b284d8", "#d88684"
+    ];
     this.dateRanges = {
       "1d": "One Day",
       "1m": "One Month",
@@ -19,29 +24,34 @@ class StockTracker extends Component {
   }
 
   state = {
+    colors: {},
     data: {},
     tickers: [],
     normalize: false,
-    selectedRange: "1m",
+    selectedDateRange: "1m",
     searchBarTitle: "Ticker",
     searchError: null,    
     sidebarTitle: "Tickers Shown"
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // Typical usage (don't forget to compare props):
-    if (this.state.selectedRange !== prevState.selectedRange) {
+    if (this.state.selectedDateRange !== prevState.selectedDateRange) {
       this.fetchAllData();
     }
+  }
+
+  pickColor = () => {
+    return this.baseColors[Math.floor(Math.random() * this.baseColors.length)];
   }
 
   mapTickerData = (tickerData, key) => {
     return tickerData.map(dataPoint => dataPoint[key]);
   }
 
-  getTickerInfo = (ticker, clearData) => {
+  getTickerInfo = (rawTicker, clearData) => {
+    const ticker = rawTicker.toUpperCase();
     // Make API call
-    fetch(getUrl(ticker, this.state.selectedRange))
+    fetch(getUrl(ticker, this.state.selectedDateRange))
       .then(res => res.json())
       .then(
         result => {
@@ -52,14 +62,19 @@ class StockTracker extends Component {
             dateData.date = this.mapTickerData(result, "date");
           }
           const tickers = [...this.state.tickers];
+          const colors = {...this.state.colors};
           if(!this.state.tickers.includes(ticker)) {
             tickers.push(ticker);
+            console.log(this.pickColor())
+            colors[ticker] = this.pickColor();
+            console.log(colors);
           }
           // Put data into state
           const data = {...this.state.data, ...dateData, [ticker]: tickerData};
           this.setState({
             data,
-            tickers
+            tickers,
+            colors
           });
         },
         error => {
@@ -83,15 +98,17 @@ class StockTracker extends Component {
   }
 
   handleDateClick = newDateRange => {
-    this.setState({selectedRange: newDateRange});
+    this.setState({selectedDateRange: newDateRange});
   }
 
   handleTickerClick = value => {
     const data = {...this.state.data};
     delete data[value];
-
+    const colors = {...this.state.colors};
+    delete colors[value];
     this.setState({
       tickers: this.state.tickers.filter( a => a !== value),
+      colors,
       data
     });
   }
@@ -109,7 +126,7 @@ class StockTracker extends Component {
             handleSubmit={this.handleSearchSubmit}
             name={this.state.searchBarTitle}
           />
-          <button className="normalize" onClick={this.handleNormalizeClick}>
+          <button className="normalize btn btn-primary" onClick={this.handleNormalizeClick}>
             {this.state.normalize ? "Unnormalize?": "Normalize?"}
           </button>
         </div>
@@ -118,18 +135,20 @@ class StockTracker extends Component {
             data={this.state.data}
             keys={this.state.tickers}
             normalize={this.state.normalize}
+            colors={this.state.colors}
           />
-          <ListContainer
+          <SidebarContainer
             handleClick={this.handleTickerClick}
             items={this.state.tickers}
             title={this.state.sidebarTitle}
+            colors={this.state.colors}
           />
         </div>
-        <div className="date-range">
+        <div className="date-range btn-group btn-group-toggle" data-toggle="buttons">
           {
             this.dateRangeKeys.map(date => {
               return (
-                <button key={date} onClick={() => this.handleDateClick(date)}>
+                <button className={`btn btn-outline-secondary ${this.state.selectedDateRange === date ? "active":null}`} key={date} onClick={() => this.handleDateClick(date)}>
                   {this.dateRanges[date]}
                 </button>
               )
