@@ -12,18 +12,26 @@ Should have:
 ### Plans
 
 Version 1:
-- Search bar for ticker
-- Chart for ticker data
+[X] Search bar for ticker
+[X] Chart for ticker data
 
 Version 2:
-- Set up Redux for one ticker's data
-- Have Column to store past searches
-- Store data for multiple tickers
+[ ] Set up Redux for one ticker's data
+    [ ] Move data formatting logic into sagas
+[X] Have Column to store past searches
+[X] Store data for multiple tickers
 
 Version 3:
-- Have Different Time periods
-- Option to Normalize Data (just view percentage)
-- Have different colors
+[X] Have Different Time periods
+[X] Option to Normalize Data (just view percentage)
+[X] Have different colors for tickers/lines
+
+Version 4:
+[ ] Group tickers into folders
+    [ ] Combine their data
+    [ ] View only folder specific data
+[ ] Ability to name folders
+[ ] Delete folders
 
 Command to deploy to gh-pages:
 git subtree push --prefix build/ origin gh-pages

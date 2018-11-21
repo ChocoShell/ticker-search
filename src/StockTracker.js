@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import SidebarContainer from './Sidebar/SidebarContainer';
 import SearchBarContainer from './SearchBar/SearchBarContainer';
 import ChartContainer from './Chart/ChartContainer';
+import { getUrl, pickColor } from './utils';
+import { addTicker, addDate } from './actions';
 import "./StockTracker.css";
-import {getUrl} from './utils';
 
 
 class StockTracker extends Component {
   constructor() {
     super();
-    this.baseColors = [
-      "#82ca9d", "#8084d8", "#8be07f", "#d884d4",
-      "#83b5ab", "#84d0d8", "#b284d8", "#d88684"
-    ];
     this.dateRanges = {
       "1d": "One Day",
       "1m": "One Month",
@@ -36,12 +36,8 @@ class StockTracker extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.selectedDateRange !== prevState.selectedDateRange) {
-      this.fetchAllData();
+      this.state.tickers.map(ticker => this.getTickerInfo(ticker, true));
     }
-  }
-
-  pickColor = () => {
-    return this.baseColors[Math.floor(Math.random() * this.baseColors.length)];
   }
 
   mapTickerData = (tickerData, key) => {
@@ -60,17 +56,19 @@ class StockTracker extends Component {
           const dateData = {};
           if (!this.state.data.date || clearData) {
             dateData.date = this.mapTickerData(result, "date");
+            this.props.addDate({date: dateData.date});
           }
           const tickers = [...this.state.tickers];
           const colors = {...this.state.colors};
-          if(!this.state.tickers.includes(ticker)) {
-            tickers.push(ticker);
-            console.log(this.pickColor())
-            colors[ticker] = this.pickColor();
-            console.log(colors);
-          }
-          // Put data into state
+
+          tickers.push(ticker);
+          colors[ticker] = pickColor();
           const data = {...this.state.data, ...dateData, [ticker]: tickerData};
+          
+          this.props.addTicker({ticker, color: colors[ticker], data: tickerData});
+
+          // Put data into state
+          // Put this part into redux
           this.setState({
             data,
             tickers,
@@ -82,10 +80,6 @@ class StockTracker extends Component {
           this.setState({searchError: `Could not find ticker: ${ticker}`});
         }
       );
-  }
-
-  fetchAllData = () => {
-    this.state.tickers.map(ticker => this.getTickerInfo(ticker, true));
   }
 
   handleSearchSubmit = value => {
@@ -114,6 +108,7 @@ class StockTracker extends Component {
   }
 
   handleNormalizeClick = () => {
+    console.log(this.props.data);
     this.setState({normalize: !this.state.normalize});
   }
 
@@ -160,4 +155,14 @@ class StockTracker extends Component {
   }
 }
 
-export default StockTracker;
+StockTracker.propTypes = {
+  addDate: PropTypes.func.isRequired,
+  addTicker: PropTypes.func.isRequired
+}
+
+const mapDispatchToProps = dispatch => ({
+  addTicker: tickerData => dispatch(addTicker(tickerData)),
+  addDate: date => dispatch(addDate(date))
+});
+
+export default connect(null, mapDispatchToProps)(StockTracker);

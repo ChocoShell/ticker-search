@@ -1,27 +1,27 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './Sidebar.css';
-
-const styleMaker = color => {
-  return {"background-color": color, "border-color": color, color: "black"};
-}
+import Folder from './Folder';
 
 const Sidebar = props => {
   return (
     <div className="sidebar-outline">
       <h3>{props.title}</h3>
       <hr />
-      <div className="btn-group-vertical list">
-        {props.items.map(item => {
-          return  (
-            <button className="btn btn-success" style={styleMaker(props.colors[item])} key={item} onClick={() => props.handleClick(item)}>
-              {item}
-            </button>
-          )
-        })}
-      </div>
+      <Folder
+        colors={props.colors}
+        handleClick={props.handleClick}
+        items={props.items}
+      />
     </div>
   )
 }
 
+Sidebar.propTypes = {
+  colors: PropTypes.object.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  items: PropTypes.array.isRequired,
+  title: PropTypes.string.isRequired
+}
 
 export default Sidebar;
