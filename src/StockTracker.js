@@ -6,7 +6,13 @@ import SidebarContainer from './Sidebar/SidebarContainer';
 import SearchBarContainer from './SearchBar/SearchBarContainer';
 import ChartContainer from './Chart/ChartContainer';
 import { getUrl, pickColor } from './utils';
-import { addTicker, addDate } from './actions';
+import {
+  addTicker,
+  updateDate,
+  updateTickerRange,
+  toggleNormalize
+} from './actions';
+
 import "./StockTracker.css";
 
 
@@ -21,22 +27,20 @@ class StockTracker extends Component {
       "ytd": "Year to Date",
     };
     this.dateRangeKeys = Object.keys(this.dateRanges);
+    this.sidebarTitle = "Tickers Shown";
+    this.searchBarTitle = "Ticker";
   }
 
   state = {
-    colors: {},
     data: {},
-    tickers: [],
     normalize: false,
     selectedDateRange: "1m",
-    searchBarTitle: "Ticker",
-    searchError: null,    
-    sidebarTitle: "Tickers Shown"
+    searchError: null
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.selectedDateRange !== prevState.selectedDateRange) {
-      this.state.tickers.map(ticker => this.getTickerInfo(ticker, true));
+      this.props.tickers.map(ticker => this.getTickerInfo(ticker, true));
     }
   }
 
@@ -44,8 +48,7 @@ class StockTracker extends Component {
     return tickerData.map(dataPoint => dataPoint[key]);
   }
 
-  getTickerInfo = (rawTicker, clearData) => {
-    const ticker = rawTicker.toUpperCase();
+  getTickerInfo = (ticker, clearData) => {    
     // Make API call
     fetch(getUrl(ticker, this.state.selectedDateRange))
       .then(res => res.json())
@@ -53,27 +56,12 @@ class StockTracker extends Component {
         result => {
           // Massage Data
           const tickerData = this.mapTickerData(result, "close");
-          const dateData = {};
-          if (!this.state.data.date || clearData) {
-            dateData.date = this.mapTickerData(result, "date");
-            this.props.addDate({date: dateData.date});
+          if (clearData || !this.props.data || !this.props.data.length) {
+            const date = this.mapTickerData(result, "date");
+            this.props.updateDate(date);
           }
-          const tickers = [...this.state.tickers];
-          const colors = {...this.state.colors};
-
-          tickers.push(ticker);
-          colors[ticker] = pickColor();
-          const data = {...this.state.data, ...dateData, [ticker]: tickerData};
           
-          this.props.addTicker({ticker, color: colors[ticker], data: tickerData});
-
-          // Put data into state
-          // Put this part into redux
-          this.setState({
-            data,
-            tickers,
-            colors
-          });
+          this.props.addTicker({ticker, color: pickColor(), data: tickerData});
         },
         error => {
           console.warn(error);
@@ -83,33 +71,21 @@ class StockTracker extends Component {
   }
 
   handleSearchSubmit = value => {
-    if (this.state.tickers.includes(value)) {
-      this.setState({searchError: `${value} already displayed.`});
+    const ticker = value.toUpperCase();
+    if (this.props.tickers.includes(ticker)) {
+      this.setState({searchError: `${ticker} already displayed.`});
     } else {
       this.setState({searchError: null});
-      this.getTickerInfo(value, false);
+      this.getTickerInfo(ticker, false);
     }
   }
 
-  handleDateClick = newDateRange => {
-    this.setState({selectedDateRange: newDateRange});
-  }
-
-  handleTickerClick = value => {
-    const data = {...this.state.data};
-    delete data[value];
-    const colors = {...this.state.colors};
-    delete colors[value];
-    this.setState({
-      tickers: this.state.tickers.filter( a => a !== value),
-      colors,
-      data
-    });
+  handleDateClick = selectedDateRange => {    
+    this.setState({selectedDateRange});
   }
 
   handleNormalizeClick = () => {
-    console.log(this.props.data);
-    this.setState({normalize: !this.state.normalize});
+    this.props.toggleNormalize();
   }
 
   render() {
@@ -119,24 +95,16 @@ class StockTracker extends Component {
           <SearchBarContainer
             error={this.state.searchError}
             handleSubmit={this.handleSearchSubmit}
-            name={this.state.searchBarTitle}
+            name={this.searchBarTitle}
           />
           <button className="normalize btn btn-primary" onClick={this.handleNormalizeClick}>
-            {this.state.normalize ? "Unnormalize?": "Normalize?"}
+            {this.props.normalize ? "Unnormalize?": "Normalize?"}
           </button>
         </div>
         <div className="second-row">
-          <ChartContainer
-            data={this.state.data}
-            keys={this.state.tickers}
-            normalize={this.state.normalize}
-            colors={this.state.colors}
-          />
+          <ChartContainer />
           <SidebarContainer
-            handleClick={this.handleTickerClick}
-            items={this.state.tickers}
-            title={this.state.sidebarTitle}
-            colors={this.state.colors}
+            title={this.sidebarTitle}
           />
         </div>
         <div className="date-range btn-group btn-group-toggle" data-toggle="buttons">
@@ -156,13 +124,21 @@ class StockTracker extends Component {
 }
 
 StockTracker.propTypes = {
-  addDate: PropTypes.func.isRequired,
-  addTicker: PropTypes.func.isRequired
+  updateDate: PropTypes.func.isRequired,
+  addTicker: PropTypes.func.isRequired,
+  toggleNormalize: PropTypes.func.isRequired
 }
+
+const mapStateToProps = state => ({
+  tickers: state.tickers,
+  normalize: state.normalize
+});
 
 const mapDispatchToProps = dispatch => ({
   addTicker: tickerData => dispatch(addTicker(tickerData)),
-  addDate: date => dispatch(addDate(date))
+  toggleNormalize: () => dispatch(toggleNormalize()),
+  updateDate: date => dispatch(updateDate(date)),
+  updateTickerRange: (ticker, data) => dispatch(updateTickerRange({ticker, data}))
 });
 
-export default connect(null, mapDispatchToProps)(StockTracker);
+export default connect(mapStateToProps, mapDispatchToProps)(StockTracker);

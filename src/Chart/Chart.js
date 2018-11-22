@@ -3,10 +3,10 @@ import React from 'react';
 import {LineChart, XAxis, YAxis, CartesianGrid, Line, Tooltip} from 'recharts';
 import "./Chart.css";
 
-const Chart = ({width, height, data, keys, colors}) => {
+const Chart = ({data, keys, colors}) => {
   return (
     <div className="chart">
-      <LineChart width={width} height={height} data={data}>
+      <LineChart width={800} height={500} data={data}>
         <XAxis dataKey="date"/>
         <YAxis type="number" domain={['auto', 'auto']} />
         <Tooltip />

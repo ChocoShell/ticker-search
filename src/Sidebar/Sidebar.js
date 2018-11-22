@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './Sidebar.css';
 import Folder from './Folder';
+import './Sidebar.css';
 
 const Sidebar = props => {
   return (

@@ -1,32 +1,17 @@
-import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { deleteTicker } from '../actions';
 import Sidebar from './Sidebar';
 
-class SidebarContainer extends Component {
-  state = {
-    name: "Ticker",
-    value: ""
-  }
+const mapStateToProps = (state, ownProps) => ({
+  title: ownProps.title,
+  items: state.tickers,
+  colors: state.colors
+});
 
-  handleChange = event => {
-    this.setState({value: event.target.value});
-    event.preventDefault();
-  }
+const mapDispatchToProps = dispatch => ({
+  handleClick: ticker => dispatch(deleteTicker(ticker)),
+});
 
-  handleSubmit = event => {
-    this.props.handleSubmit(this.state.value);
-    event.preventDefault();
-  }
 
-  render() {
-    return (
-      <Sidebar
-        colors={this.props.colors}
-        handleClick={this.props.handleClick}
-        items={this.props.items}
-        title={this.props.title}
-      />
-    )
-  }
-}
-
-export default SidebarContainer;
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
