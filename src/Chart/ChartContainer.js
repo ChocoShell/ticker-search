@@ -12,10 +12,12 @@ const getFormattedChartData = store => {
     for (let j=0; j < length; j++) {
       const node = {date: date[j]};
       for (let ticker of tickers) {
-        if (normalize) {
-          node[ticker] = (store.chartData[ticker].data[j]/store.chartData[ticker].data[0]).toFixed(4);
-        } else {
-          node[ticker] = store.chartData[ticker].data[j];
+        if (store.chartData[ticker].data.length === length) {
+          if (normalize) {
+            node[ticker] = (store.chartData[ticker].data[j]/store.chartData[ticker].data[0]).toFixed(4);
+          } else {
+            node[ticker] = store.chartData[ticker].data[j];
+          }
         }
       }
       finalData.push(node);

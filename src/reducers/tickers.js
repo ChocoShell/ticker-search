@@ -1,9 +1,4 @@
-const initialState = {
-  chartData: [],
-  normalize: false,
-  tickers: [],
-  date: []
-};
+import initialState from './initialState';
 
 const tickers = (state = initialState, action) => {
   switch (action.type) {
@@ -23,6 +18,16 @@ const tickers = (state = initialState, action) => {
           }
         }
       }
+    case 'CLEAR_DATA': {
+      const tickers = state.tickers;
+      const newState = {...state};
+      for (let ticker of tickers) {
+        newState.chartData[ticker].data = [];
+      }
+      return newState;
+    }
+    case 'SET_ERROR':
+      return {...state, error: action.error};
     case 'DELETE_TICKER': {
       const chartData = {
         ...state.chartData
@@ -41,21 +46,30 @@ const tickers = (state = initialState, action) => {
         tickers: state.tickers.filter(ticker => ticker !== action.ticker)
       }
     }
-    case 'UPDATE_TICKER_RANGE':
-      return {
-        ...state,
-        chartData: {
-          ...state.chartData,
-          [action.ticker]: {
-            ...state.chartData[action.ticker],
-            data: action.data
-          }
-        }
-      }
+    case 'UPDATE_TICKER_RANGE': {
+      const newState = {...state};
+      newState.chartData[action.ticker].data = action.data;
+      return newState;
+    }
+    case 'UPDATE_DATA': {
+      console.log(action);
+      const newState = {...state};
+      newState.date = action.date;
+      const tickers = Object.keys(action.tickersData);
+      for (let ticker of tickers) {
+        newState.chartData[ticker] = action.tickersData[ticker]
+      };
+      return newState;
+    }
     case 'UPDATE_DATE':
       return {
         ...state,
         date: action.date
+      }
+    case 'UPDATE_DATE_RANGE':
+      return {
+        ...state,
+        dateRange: action.dateRange
       }
     case 'TOGGLE_NORMALIZE':
       return {

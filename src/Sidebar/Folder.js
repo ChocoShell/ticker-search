@@ -2,7 +2,7 @@ import React from 'react';
 import './Sidebar.css';
 
 const styleMaker = color => {
-  return {"background-color": color, "border-color": color, color: "black"};
+  return {"backgroundColor": color, "borderColor": color, color: "black"};
 }
 
 const Folder = props => {

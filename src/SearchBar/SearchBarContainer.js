@@ -7,7 +7,8 @@ class SearchBarContainer extends Component {
   }
 
   handleChange = event => {
-    this.setState({value: event.target.value});
+    const value = event.target.value.toUpperCase();
+    this.setState({value});
     event.preventDefault();
   }
 

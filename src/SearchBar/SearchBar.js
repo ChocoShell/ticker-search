@@ -7,7 +7,16 @@ const SearchBar = props => {
       <form className="form-inline" onSubmit={props.handleSubmit}>
         <div className="form-group">
           <label htmlFor="InputTicker">{props.name}:</label>
-          <input onChange={props.handleChange} name={props.name} type="text" className="form-control mx-sm-2" id="InputTicker" aria-describedby="tickerHelp" placeholder="Enter Symbol" />
+          <input
+            onChange={props.handleChange}
+            value={props.value}
+            name={props.name}
+            type="text"
+            className="form-control mx-sm-2"
+            id="InputTicker"
+            aria-describedby="tickerHelp"
+            placeholder="Enter Symbol"
+          />
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>

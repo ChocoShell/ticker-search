@@ -8,3 +8,7 @@ const baseColors = [
 export const pickColor = () => {
   return baseColors[Math.floor(Math.random() * baseColors.length)];
 }
+
+export const mapTickerData = (tickerData, key) => {
+  return tickerData.map(dataPoint => dataPoint[key]);
+}
