@@ -1,13 +1,13 @@
 {
-  "main.css": "/ticker-search/static/css/main.2fee0f95.chunk.css",
-  "main.js": "/ticker-search/static/js/main.395b0451.chunk.js",
-  "main.js.map": "/ticker-search/static/js/main.395b0451.chunk.js.map",
-  "static/js/1.2e1b09fe.chunk.js": "/ticker-search/static/js/1.2e1b09fe.chunk.js",
-  "static/js/1.2e1b09fe.chunk.js.map": "/ticker-search/static/js/1.2e1b09fe.chunk.js.map",
+  "main.css": "/ticker-search/static/css/main.bf1804be.chunk.css",
+  "main.js": "/ticker-search/static/js/main.ee6b15bd.chunk.js",
+  "main.js.map": "/ticker-search/static/js/main.ee6b15bd.chunk.js.map",
+  "static/js/1.e0e43ead.chunk.js": "/ticker-search/static/js/1.e0e43ead.chunk.js",
+  "static/js/1.e0e43ead.chunk.js.map": "/ticker-search/static/js/1.e0e43ead.chunk.js.map",
   "runtime~main.js": "/ticker-search/static/js/runtime~main.234869f3.js",
   "runtime~main.js.map": "/ticker-search/static/js/runtime~main.234869f3.js.map",
-  "static/css/main.2fee0f95.chunk.css.map": "/ticker-search/static/css/main.2fee0f95.chunk.css.map",
+  "static/css/main.bf1804be.chunk.css.map": "/ticker-search/static/css/main.bf1804be.chunk.css.map",
   "index.html": "/ticker-search/index.html",
-  "precache-manifest.6dcfdefeac26176d326daecfa6f2b1ae.js": "/ticker-search/precache-manifest.6dcfdefeac26176d326daecfa6f2b1ae.js",
+  "precache-manifest.a02925fb5038c12a9f25c7af64fa277f.js": "/ticker-search/precache-manifest.a02925fb5038c12a9f25c7af64fa277f.js",
   "service-worker.js": "/ticker-search/service-worker.js"
 }
