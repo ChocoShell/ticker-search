@@ -29,7 +29,8 @@ const getFormattedChartData = store => {
 const mapStateToProps = state => ({
   data: getFormattedChartData(state),
   keys: state.tickers,
-  colors: state.colors
+  colors: state.colors,
+  ylabel: state.normalize ? "Cumulative Return": "Prices"
 });
 
 export default connect(mapStateToProps, {})(Chart);

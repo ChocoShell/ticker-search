@@ -26,6 +26,10 @@ class StockTracker extends Component {
     this.searchBarTitle = "Ticker";
   }
 
+  componentDidMount(){
+    this.props.searchTicker('SPY');
+  }
+
   render() {
     return (
       <div className="container">
@@ -36,7 +40,7 @@ class StockTracker extends Component {
             name={this.searchBarTitle}
           />
           <button className="normalize btn btn-primary" onClick={this.props.toggleNormalize}>
-            {this.props.normalize ? "Unnormalize?": "Normalize?"}
+            {this.props.normalize ? "Prices?": "Cumulative Return?"}
           </button>
         </div>
         <div className="my-row">

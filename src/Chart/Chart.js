@@ -3,12 +3,12 @@ import React from 'react';
 import {LineChart, XAxis, YAxis, CartesianGrid, Line, Tooltip} from 'recharts';
 import "./Chart.css";
 
-const Chart = ({data, keys, colors}) => {
+const Chart = ({data, keys, colors, ylabel}) => {
   return (
     <div className="chart">
-      <LineChart width={800} height={500} data={data}>
-        <XAxis dataKey="date"/>
-        <YAxis type="number" domain={['auto', 'auto']} />
+      <LineChart width={800} height={600} data={data}>
+        <XAxis label="Date" dataKey="date"/>
+        <YAxis label={ylabel} type="number" domain={['auto', 'auto']} />
         <Tooltip />
         <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
         {keys && keys.map(key => <Line type="monotone" dataKey={key} key={key} stroke={colors[key]} />)}

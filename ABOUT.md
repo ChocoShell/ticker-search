@@ -6,8 +6,12 @@ Should have:
 - Text box that will search for a ticker
 - Area for chart
 - Place to add multiple tickers
-- Be able to turn off and on lines
-- Group tickers together to see their performance
+- Ability to be able to turn off and on lines
+- Ability to group tickers together to see their performance
+- Basic analysis tools
+    - Moving Average
+    - Cumulative returns
+    - Daily Percent Changes
 
 ### Plans
 
